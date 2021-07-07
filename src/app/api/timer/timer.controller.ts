@@ -12,6 +12,13 @@ export class HealthCheckController {
     }
     return next();
   }
+  public async totalOpts(req: restify.Request, res: restify.Response, next: restify.Next) {
+    res.send(200, {
+      methodsAllowed: "GET",
+      description: "this endpoint is meant to get the latest value of the counter"
+    });
+    return next();
+  }
 
   public async updateCount(req: restify.Request, res: restify.Response, next: restify.Next) {
     try {
@@ -31,10 +38,24 @@ export class HealthCheckController {
     }
     return next();
   }
+  public async updateCountOpts(req: restify.Request, res: restify.Response, next: restify.Next) {
+    res.send(200, {
+      methodsAllowed: "POST",
+      description: "this endpoint is meant to increase and update the time counter",
+      body: [
+        {
+          field: "time",
+          type: "number",
+          mandatory: true
+        }
+      ]
+    });
+    return next();
+  }
   public async resetCount(req: restify.Request, res: restify.Response, next: restify.Next) {
     try {
       const password = req.body.password;
-      if (!password || password !== "Abc.1234.!" || req.headers["custom-header"] !== "reset") {
+      if (!password || password !== "Abc.1234.!" || req.headers["secret-header"] !== "reset") {
         return res.send(401, {message: "unauthorized"});
       }
       timerRoomInstance.resetCurrentTime();
@@ -47,6 +68,20 @@ export class HealthCheckController {
       }
       res.send(500, {message: error.message});
     }
+    return next();
+  }
+  public async resetCountOpts(req: restify.Request, res: restify.Response, next: restify.Next) {
+    res.send(200, {
+      methodsAllowed: "PUT",
+      description: "this endpoint is meant to reset and update the time counter to 0 ",
+      body: [
+        {
+          field: "password",
+          type: "number",
+          mandatory: true
+        }
+      ]
+    });
     return next();
   }
 }
