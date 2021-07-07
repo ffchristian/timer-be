@@ -9,6 +9,6 @@
     "tslint.ignoreDefinitionFiles": false,
     "tslint.autoFixOnSave": true,
     "tslint.exclude": "**/node_modules/**/*" ,
-    "editor.tabSize": 4,      
+    "editor.tabSize": 2,      
 	"editor.insertSpaces": false
 }
