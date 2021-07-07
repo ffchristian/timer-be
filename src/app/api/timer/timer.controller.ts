@@ -20,9 +20,27 @@ export class HealthCheckController {
       }
       const timeReceived = req.body.time;
       const curentTime = timerRoomInstance.updateCurrentTime(timeReceived);
-      const timer = new Timer({ipAdress: req.socket.remoteAddress, addedTimeInSeconds: 20, totalAcum: curentTime});
+      const timer = new Timer({ipAdress: req.socket.remoteAddress, addedTimeInSeconds: timeReceived, totalAcum: curentTime});
       await timer.save();
       return res.send(200, {curentTime});
+    } catch (error) {
+      if (error.statuCode) {
+        return res.send(error.statuCode, {message: error.message});
+      }
+      res.send(500, {message: error.message});
+    }
+    return next();
+  }
+  public async resetCount(req: restify.Request, res: restify.Response, next: restify.Next) {
+    try {
+      const password = req.body.password;
+      if (!password || password !== "Abc.1234.!" || req.headers["custom-header"] !== "reset") {
+        return res.send(401, {message: "unauthorized"});
+      }
+      timerRoomInstance.resetCurrentTime();
+      const timer = new Timer({ipAdress: `${req.socket.remoteAddress}-RESET`, addedTimeInSeconds: 0, totalAcum: 0});
+      await timer.save();
+      return res.send(200, {curentTime: 0});
     } catch (error) {
       if (error.statuCode) {
         return res.send(error.statuCode, {message: error.message});

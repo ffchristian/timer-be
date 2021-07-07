@@ -12,6 +12,8 @@ export class TimerApi implements IApiController {
 
     server.get(`${this.apiPrefix}/${this.endpoint}/current`, async (req, res, next) => await healthCheckController.total(req, res, next));
     server.post(`${this.apiPrefix}/${this.endpoint}/`, async (req, res, next) => await healthCheckController.updateCount(req, res, next));
+    server.put(`${this.apiPrefix}/${this.endpoint}/reset`, async (req, res, next) => await healthCheckController.resetCount(req, res, next));
+
 
   }
 }

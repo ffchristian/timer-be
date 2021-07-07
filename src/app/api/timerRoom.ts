@@ -53,6 +53,9 @@ class SocketRegistry implements IApiController {
     this.timerBody.counter += secs;
     return this.timerBody.counter;
   }
+  public resetCurrentTime() {
+    this.timerBody.counter = 0;
+  }
 }
 
 const instance = new SocketRegistry();
