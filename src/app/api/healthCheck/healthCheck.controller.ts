@@ -10,9 +10,6 @@ export class HealthCheckController {
       await data.connect();
       if (data.database !== undefined) {
         const collection: Collection = await data.database.collection("timeline");
-        // await collection.insert({
-        //   Message: "generator-node-api-docker-1st-class-experience is a 1st class awesome experience with typescript, node, docker and vscode!",
-        // });
         const result: any[] = await collection.find({}).toArray();
 
         res.send([
