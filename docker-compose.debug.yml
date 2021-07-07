@@ -1,0 +1,11 @@
+version: '3'
+services:
+  timer_task_be-api:    
+    build:
+      dockerfile: ./Dockerfile.debug.timer_task_be-api
+    image: timer_task_be-api-livedebug
+    ports:
+    - "9229:9229"
+    volumes: 
+    - ./src:/app/src
+    - ./dist:/app/dist

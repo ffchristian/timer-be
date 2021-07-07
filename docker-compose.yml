@@ -1,0 +1,47 @@
+version: '3'
+services:
+  timer_task_be-api-base:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.all.timer_task_be-api-base
+    image: timer_task_be-api-base
+  timer_task_be-api:    
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.release.timer_task_be-api
+    image: timer_task_be-api
+    depends_on:
+      - timer_task_be-api-base
+      - mongo
+    links:
+      - mongo:mongo
+    networks: 
+    - timer_task_be-net
+    ports:    
+    - "5000:5000"
+    environment:
+      mongodb_app: mongodb://root:3caa2f4ef1a945b7895b36612587e359@mongo:27017/admin
+      API_PORT: 5000      
+  mongo:
+    image: mongo
+    volumes:
+    - db_data:/data/db
+    restart: always
+    command: --storageEngine wiredTiger
+    ports:
+    - "27017:27017"
+    depends_on:
+      - timer_task_be-api-base    
+    networks:
+    - timer_task_be-net
+    environment: 
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 3caa2f4ef1a945b7895b36612587e359
+
+
+volumes:
+  db_data:
+
+networks: 
+  timer_task_be-net: 
+    driver: bridge
