@@ -42,7 +42,7 @@ export class ApiServer implements IInitializable {
 
     return new Promise<void>((resolve, reject) => {
       if (this.restifyServer !== undefined) {
-        this.restifyServer.listen(process.env.API_PORT, () => {
+        this.restifyServer.listen(process.env.PORT, () => {
           if (this.restifyServer !== undefined) {
             console.log("%s is online on %s", this.restifyServer.name, this.restifyServer.url);
           }
