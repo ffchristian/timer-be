@@ -1,25 +1,15 @@
-import { Collection, Db, MongoClient } from "mongodb";
 import * as restify from "restify";
-import { DataProcess } from "../../data/DataProcess";
-
+import Timer from "./../timer/timer.model";
 export class HealthCheckController {
   public async index(req: restify.Request, res: restify.Response, next: restify.Next) {
     try {
-      // TEST DB
-      const data = new DataProcess("db_feed");
-      await data.connect();
-      if (data.database !== undefined) {
-        const collection: Collection = await data.database.collection("timeline");
-        const result: any[] = await collection.find({}).toArray();
-
-        res.send([
-          { name: "api", status: "ok" },
-          { name: "mongodb", status: result.length > 0 ? "ok" : "no-data" },
-        ]);
-      }
-      res.send(400, "Database not reacheble!");
+      const timer = await Timer.findCurrentTotal();
+      res.send([
+        { name: "api", status: "ok" },
+        { name: "mongodb", currentCount: new Date( timer.totalAcum * 1000).toISOString().substr(11, 8) },
+      ]);
     } catch (error) {
-      res.send(400, error);
+      res.send(400, {message: error.message});
     }
     return next();
   }
