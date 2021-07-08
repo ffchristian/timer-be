@@ -55,7 +55,7 @@ export class HealthCheckController {
   public async resetCount(req: restify.Request, res: restify.Response, next: restify.Next) {
     try {
       const password = req.body.password;
-      if (!password || password !== "Abc.1234.!" || req.headers["secret-header"] !== "reset") {
+      if (!password || password !== process.env.RESET_PASSWORD || req.headers["secret-header"] !== process.env.RESET_HEADER_VALUE) {
         return res.send(401, {message: "unauthorized"});
       }
       timerRoomInstance.resetCurrentTime();
